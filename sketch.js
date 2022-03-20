@@ -16,8 +16,13 @@ function setup() {
   previous = createGraphics(400, 400);
   frameRate(1 / dt);
 
+  cnv.mousePressed(centerUpdate);
+
+  centerX = width / 2;
+  centerY = height / 2;
+
   water = new surface();
-  water.add_wave(createVector(width / 2, height / 2), 5, 1000);
+  water.add_wave(createVector(centerX, centerY), 5, 1000);
 
   for (let i = 0; i < 5; i++) {
     let x1 = floor(random(100, width - 100));
@@ -54,6 +59,12 @@ function draw() {
   text("press 'r' or touch the screen to randomize\npress 'a' to restart current \npress 'i' to illumination", 20, 55);
 }
 
+function reset() {
+  water = new surface();
+  water.add_wave(createVector(centerX, centerY), 5, 1000);
+  previous = createGraphics(400, 400);
+}
+
 function keyPressed() {
   if (key == 'r') {
     water.add_random(-255, 255);
@@ -64,15 +75,20 @@ function keyPressed() {
     return false;
   }
   if (key == 'a') {
-    water = new surface();
-    water.add_wave(createVector(width / 2, height / 2), 5, 1000);
-    previous = createGraphics(400, 400);
+    reset();
     return false;
   }
 }
 
 function touchStarted() {
   water.add_random(-255, 255);
+  return false;
+}
+
+function centerUpdate() {
+  centerX = mouseX;
+  centerY = mouseY;
+  reset();
   return false;
 }
 
@@ -273,7 +289,7 @@ class surface {
       if (illum) {
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < height; y++) {
-            set(x, y, abs(this.u[x][y])/20);
+            set(x, y, abs(this.u[x][y]) / 20);
           }
         }
       } else {
