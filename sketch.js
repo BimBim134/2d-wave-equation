@@ -80,11 +80,6 @@ function keyPressed() {
   }
 }
 
-function touchStarted() {
-  water.add_random(-255, 255);
-  return false;
-}
-
 function centerUpdate() {
   centerX = mouseX;
   centerY = mouseY;
